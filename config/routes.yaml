@@ -18,3 +18,8 @@ admin_dashboard:
     path: /admin
     controller: App\Controller\AdminController::index
     methods: GET
+
+hello:
+    path: /hello
+    controller: App\Controller\HelloController::index
+    methods: GET
