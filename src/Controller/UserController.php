@@ -1,5 +1,4 @@
 <?php 
-
 namespace App\Controller;
 
 use App\Form\UserFormType;
@@ -11,8 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/create", name="user_new")
+     * @Route("/user/create", name="user_create")
      */
+    #[Route('/user/create', name: 'user_create')]
     public function newUser(Request $request): Response
     {
         $form = $this->createForm(UserFormType::class);
