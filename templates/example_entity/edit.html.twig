@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ExampleEntity{% endblock %}
+
+{% block body %}
+    <h1>Edit ExampleEntity</h1>
+
+    {{ include('example_entity/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_example_entity_index') }}">back to list</a>
+
+    {{ include('example_entity/_delete_form.html.twig') }}
+{% endblock %}

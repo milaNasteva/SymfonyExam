@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ExampleEntity{% endblock %}
+
+{% block body %}
+    <h1>Create new ExampleEntity</h1>
+
+    {{ include('example_entity/_form.html.twig') }}
+
+    <a href="{{ path('app_example_entity_index') }}">back to list</a>
+{% endblock %}

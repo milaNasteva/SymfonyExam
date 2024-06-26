@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExampleEntity index{% endblock %}
+
+{% block body %}
+    <h1>ExampleEntity index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for example_entity in example_entities %}
+            <tr>
+                <td>{{ example_entity.id }}</td>
+                <td>{{ example_entity.name }}</td>
+                <td>{{ example_entity.description }}</td>
+                <td>
+                    <a href="{{ path('app_example_entity_show', {'id': example_entity.id}) }}">show</a>
+                    <a href="{{ path('app_example_entity_edit', {'id': example_entity.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_example_entity_new') }}">Create new</a>
+{% endblock %}
