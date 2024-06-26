@@ -1,86 +1,49 @@
 <?php
-namespace App\Controller;
+namespace App\Repository;
 
 use App\Entity\ExampleEntity;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class ExampleEntityRepository extends AbstractController
+class ExampleEntityRepository extends ServiceEntityRepository
 {
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($registry, ExampleEntity::class);
     }
 
-    /**
-     * @Route("/example/create", name="example_create", methods={"GET", "POST"})
-     */
-    public function create(Request $request): Response
+    // Example method to find all entities
+    public function findAllExampleEntities()
     {
-        $exampleEntity = new ExampleEntity();
-        $form = $this->createForm(ExampleEntityType::class, $exampleEntity);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($exampleEntity);
-            $this->entityManager->flush();
-
-            $this->addFlash('success', 'ExampleEntity created successfully!');
-            return $this->redirectToRoute('example_index');
-        }
-
-        return $this->render('example/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
-    /**
-     * @Route("/example/{id}", name="example_show", methods={"GET"})
-     */
-    public function show(ExampleEntity $exampleEntity): Response
+    // Example method to find an entity by ID
+    public function findExampleEntityById($id)
     {
-        return $this->render('example/show.html.twig', [
-            'exampleEntity' => $exampleEntity,
-        ]);
+        return $this->createQueryBuilder('e')
+            ->where('e.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
-    /**
-     * @Route("/example/{id}/edit", name="example_edit", methods={"GET", "POST"})
-     */
-    public function edit(Request $request, ExampleEntity $exampleEntity): Response
+    // Example method to save or update an entity
+    public function saveExampleEntity(ExampleEntity $entity)
     {
-        $form = $this->createForm(ExampleEntityType::class, $exampleEntity);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->flush();
-
-            $this->addFlash('success', 'ExampleEntity updated successfully!');
-            return $this->redirectToRoute('example_index');
-        }
-
-        return $this->render('example/edit.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        $this->_em->persist($entity);
+        $this->_em->flush();
     }
 
-    /**
-     * @Route("/example/{id}", name="example_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, ExampleEntity $exampleEntity): Response
+    // Example method to delete an entity
+    public function deleteExampleEntity(ExampleEntity $entity)
     {
-        if ($this->isCsrfTokenValid('delete'.$exampleEntity->getId(), $request->request->get('_token'))) {
-            $this->entityManager->remove($exampleEntity);
-            $this->entityManager->flush();
-
-            $this->addFlash('success', 'ExampleEntity deleted successfully!');
-        }
-
-        return $this->redirectToRoute('example_index');
+        $this->_em->remove($entity);
+        $this->_em->flush();
     }
+
+    // Add more methods as needed for specific queries or operations
 }
